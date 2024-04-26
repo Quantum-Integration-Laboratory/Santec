@@ -23,9 +23,10 @@ import sys
 import time
 
 # Checking and Accessing the DLL (Santec_FTDI) [make sure the DLLs are in the same directory as the script]
-assembly_path = r".\DLL"  # device-class path
-sys.path.append(assembly_path)
-ref = clr.AddReference(r"Santec_FTDI")
+assembly_path = r".\qil_santec\DLL"  # device-class path
+abs_path=os.path.abspath(os.path.join(assembly_path))
+sys.path.append(abs_path)
+ref = clr.AddReference(abs_path+r"\Santec_FTDI.dll")
 
 # Importing the main method from the DLL
 import Santec_FTDI as ftdi
@@ -97,6 +98,7 @@ class Santec:
 class USB_COMMS():
     def __init__(self,serialNumber=16120001):
         device_list=get_devices()
+        serialNumber=str(serialNumber)
         if serialNumber in device_list:
             instrument = ftdi.FTD2xx_helper(serialNumber)
             print(f"CONNECTION SUCCESSFUL, CONNECTED TO {instrument.QueryIdn()}")
